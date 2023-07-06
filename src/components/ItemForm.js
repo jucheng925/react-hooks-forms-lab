@@ -1,7 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import { v4 as uuid } from "uuid";
 
-function ItemForm({onItemFormSubmit, formCategory, formName, onFormName, onFormCategory }) {
+function ItemForm({onItemFormSubmit}) {
+  const [formName, setFormName] = useState("")
+  const [formCategory, setFormCategory] = useState("Produce")
+  console.log(formName)
+  function handleFormName(event) {
+    setFormName(event.target.value)
+  }
+
+  function handleFormCategory(event) {
+    setFormCategory(event.target.value)
+  }
+
   function handleSubmit(event) {
     event.preventDefault()
     const formNewItem = {
@@ -17,12 +28,12 @@ function ItemForm({onItemFormSubmit, formCategory, formName, onFormName, onFormC
     <form className="NewItem" onSubmit={handleSubmit}>
       <label>
         Name:
-        <input type="text" name="name" value={formName} onChange={onFormName} />
+        <input type="text" name="name" value={formName} onChange={handleFormName} />
       </label>
 
       <label>
         Category:
-        <select name="category" value={formCategory} onChange={onFormCategory}>
+        <select name="category" value={formCategory} onChange={handleFormCategory}>
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
           <option value="Dessert">Dessert</option>

@@ -3,21 +3,9 @@ import ItemForm from "./ItemForm";
 import Filter from "./Filter";
 import Item from "./Item";
 
-function ShoppingList({ items, addNewItems }) {
+function ShoppingList({ items, addNewItem }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("")
-  const [formName, setFormName] = useState("")
-  const [formCategory, setFormCategory] = useState("Produce")
-
-  
-
-  function handleFormName(event) {
-    setFormName(event.target.value)
-  }
-
-  function handleFormCategory(event) {
-    setFormCategory(event.target.value)
-  }
+  const [ search, setSearchTerm] = useState("")
 
   function handleCategoryChange(event) {
     setSelectedCategory(event.target.value);
@@ -27,34 +15,26 @@ function ShoppingList({ items, addNewItems }) {
     setSearchTerm(event.target.value)
   }
 
-  const itemsToSearch = items.find(item => searchTerm.toLowerCase() === item.name.toLowerCase())
+  const itemsToSearch = items.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+
   
-  const itemsToDisplay = items.filter((item) => {
+  const itemsToDisplay = itemsToSearch.filter((item) => {
     if (selectedCategory === "All") return true
     return item.category === selectedCategory;
   });
 
   return (
     <div className="ShoppingList">
-      <ItemForm 
-          onItemFormSubmit={addNewItems} 
-          onFormName={handleFormName} 
-          onFormCategory={handleFormCategory} 
-          formName={formName} 
-          formCategory={formCategory}
-          setFormName={setFormName}
-          setFormCategory={setFormCategory} />
-      <Filter 
+      <ItemForm onItemFormSubmit={addNewItem} />
+      <Filter
         onCategoryChange={handleCategoryChange} 
-        searchTerm={searchTerm}
+        search={search}
         onSearchChange={handleSearch}
       />
       <ul className="Items">
-        {itemsToSearch === undefined ? 
-            itemsToDisplay.map((item) => (
+        {itemsToDisplay.map((item) => (
               <Item key={item.id} name={item.name} category={item.category} />
-            )) : 
-            <Item key={itemsToSearch.id} name={itemsToSearch.name} category={itemsToSearch.category} />
+        ))
         }
       </ul>
     </div>
